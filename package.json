@@ -1,0 +1,27 @@
+{
+  "name": "bs3221sum",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Repo for BS3221 Sumamtive Assignment",
+  "main": "index.js",
+  "scripts": {
+    "start": "set NODE_ENV=development && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frangordon1/BS3221SUM.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frangordon1/BS3221SUM/issues"
+  },
+  "homepage": "https://github.com/frangordon1/BS3221SUM#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mssql": "^11.0.1"
+  }
+}

@@ -39,6 +39,7 @@ function App() {
           allowFullScreen=""
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
+          title="Google Map - Antarctica"
         ></iframe>
       )}
     </div>

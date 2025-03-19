@@ -100,7 +100,7 @@ export default class Database {
     const request = this.poolconnection.request();
     const result = await request
       .input('id', sql.Int, idAsNumber)
-      .query(`DELETE FROM Wardns WHERE id = @id`);
+      .query(`DELETE FROM Wardens WHERE id = @id`);
 
     return result.rowsAffected[0];
   }

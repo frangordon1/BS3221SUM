@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { getWardens } from './api';
+import React, { useEffect } from 'react'; 
 
 function App() {
-
-
+  
   useEffect(() => {
+
   }, []);
 
   return (
@@ -16,5 +15,6 @@ function App() {
 }
 
 export default App;
+
 
 

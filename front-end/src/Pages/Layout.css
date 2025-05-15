@@ -1,0 +1,136 @@
+/* Layout.css */
+
+.layout-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: #6f2969;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logo-container {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .logo {
+    width: 200px;
+  }
+
+  .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .bg-green-100 {
+    background-color: #d1fae5; 
+  }
+
+  .bg-gray-200 {
+    background-color: #e5e7eb;  
+  }
+
+  .form-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px; 
+  }
+
+  .new-shift-form {
+  flex: 1;
+  padding: 1rem;
+  }
+
+  .status-sidebar {
+  width: 300px; 
+  margin-top: 175px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-left: 1px solid #ccc;
+  overflow-y: auto; 
+  position: sticky; 
+  top: 0; 
+  height: 300px; 
+  }
+
+
+  .nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  }
+  
+  .nav-link {
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-link:hover {
+    background-color: #ffc800;
+    color: black;
+  }
+  
+  .nav-link.active {
+    background-color: #ffc800;
+    color: black;
+    font-weight: bold;
+  }
+
+  .logoutButton {
+    margin-top: auto; 
+    padding: 10px 20px; 
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px; 
+    font-size: 16px; 
+    cursor: pointer;
+    width: 100%; 
+    text-align: center;
+  }
+  
+  .logoutButton:hover {
+    background-color: darkred; /* Darker red color when hovered */
+  }
+  
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .page-content {
+    flex-grow: 1;
+    padding: 10px;
+    background-color: white;
+    overflow-y: auto;
+  }
+  
+  .footer {
+    background-color: #ffc800;
+    color: black;
+    text-align: center;
+    padding: 5px;
+  }
+
+  .standard-button {
+    background-color: #6f2969;
+    color: white;
+    padding: 10px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+  

@@ -68,7 +68,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'warden-app'
+          app-name: 'thankful-smoke-05a308503'
           slot-name: 'Production'
           package: .
           

@@ -70,7 +70,7 @@ const MyUser = () => {
   };
 
   const handleDeleteClick = async () => {
-    if (userData.staffID == "001"){
+    if (userData.staffID === "001"){
       window.alert("This is the core admin account, deletion is not permitted", "OK");
       return;
 

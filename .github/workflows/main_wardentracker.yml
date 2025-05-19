@@ -33,5 +33,6 @@ jobs:
           action: "upload"
           app_location: "front-end"
           output_location: "build"
+          api_location: "back-end" # Optional, if you have an API
 
           

@@ -32,6 +32,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }} # For PR builds
           action: "upload"
           app_location: "front-end"
-          output_location: "front-end"
+          output_location: "build"
 
           

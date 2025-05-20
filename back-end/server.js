@@ -6,33 +6,26 @@ import buildingsRoute from './routes/buildings.js';
 import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
-import { clearCheckIns } from './schedule.js';
+// remove your `cors` import entirely, since Azure is handling it
+// import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+// no need for any CORS middleware here!
+// app.use(cors({ origin: /*…*/ }));
+
 app.use(express.json());
 
-// ✅ Manual CORS middleware
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://thankful-smoke-05a308503.6.azurestaticapps.net');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
-
-// API routes
+// API Routes
 app.use('/api/wardenregister', wardenRegistrationRoutes);
-app.use('/api/login', loginRoute);
-app.use('/api/buildings', buildingsRoute);
-app.use('/api/checkins', checkinsRoute);
-app.use('/api/user', usersRoute);
+app.use('/api/login',        loginRoute);
+app.use('/api/buildings',    buildingsRoute);
+app.use('/api/checkins',     checkinsRoute);
+app.use('/api/user',         usersRoute);
+
+// optional test endpoint
+app.get('/api/test', (req, res) => res.send('API is working'));
 
 (async () => {
   try {

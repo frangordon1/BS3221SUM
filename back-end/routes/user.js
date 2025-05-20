@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
 
 router.put('/:staffID', async (req, res) => {
@@ -50,7 +50,7 @@ router.put('/:staffID', async (req, res) => {
 
 router.delete('/delete/:staffID', async (req, res) => {
   const db = req.app.locals.database;
- 
+
   try {
     // Start by checking if the user exists
     const userQuery = 'SELECT * FROM Wardens WHERE staffID = @staffID';
@@ -76,7 +76,7 @@ router.delete('/delete/:staffID', async (req, res) => {
     await db.poolconnection.request()
       .input('staffID', db.sql.NVarChar(255), req.params.staffID)
       .query('DELETE FROM Wardens WHERE staffID = @staffID');
-   
+
     // Successfully deleted
     res.status(200).json({ message: 'Account deleted successfully' });
   } catch (err) {
@@ -85,6 +85,6 @@ router.delete('/delete/:staffID', async (req, res) => {
   }
 });
 
+module.exports = router;
 
-export default router;
 

@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 
 const router = express.Router();
 
@@ -36,9 +36,8 @@ router.get('/statuses', async (req, res) => {
           AND c.checkInTime IS NOT NULL
         ORDER BY CAST(c.checkInTime AS time)
       ) AS nextCheckInTime
-      FROM Buildings b`
-
-    );
+      FROM Buildings b
+    `);
 
     res.json(result.recordset);
   } catch (err) {
@@ -47,9 +46,5 @@ router.get('/statuses', async (req, res) => {
   }
 });
 
+module.exports = router;
 
-
-
-
-
-export default router;

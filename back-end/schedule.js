@@ -1,4 +1,4 @@
-import cron from 'node-cron';
+const cron = require('node-cron');
 
 let db;
 
@@ -63,7 +63,7 @@ const updateStatuses = async () => {
 };
 
 // This function receives the database connection and sets up cron jobs
-export function scheduleTasks(database) {
+function scheduleTasks(database) {
   db = database;
 
   cron.schedule('0 0 * * *', clearCheckIns, {
@@ -76,5 +76,9 @@ export function scheduleTasks(database) {
 
   console.log('Scheduled tasks started.');
 }
+
+module.exports = {
+  scheduleTasks,
+};
 
 

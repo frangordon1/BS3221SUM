@@ -1,16 +1,12 @@
-
-import { passwordConfig } from './config.js';
-import wardenRegistrationRoutes from './routes/wardenregister.js';
-import loginRoute from './routes/loggingin.js';
-import buildingsRoute from './routes/buildings.js';
-import checkinsRoute from './routes/checkins.js';
-import usersRoute from './routes/user.js';
-import { createDatabaseConnection } from './database.js';
-import cors from 'cors';
-
+const { passwordConfig } = require('./config');
+const wardenRegistrationRoutes = require('./routes/wardenregister');
+const loginRoute = require('./routes/loggingin');
+const buildingsRoute = require('./routes/buildings');
+const checkinsRoute = require('./routes/checkins');
+const usersRoute = require('./routes/user');
+const { createDatabaseConnection } = require('./database');
+const cors = require('cors');
 const express = require('express');
-
-
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -22,35 +18,27 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-
-// no need for any CORS middleware here!
-// app.use(cors({ origin: /*…*/ }));
-
 app.use((req, res, next) => {
   console.log(`[ROUTE HIT] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 app.use(express.json());
-
-
 
 // API Routes
 app.use('/api/wardenregister', wardenRegistrationRoutes);
-app.use('/api/login',        loginRoute);
-app.use('/api/buildings',    buildingsRoute);
-app.use('/api/checkins',     checkinsRoute);
-app.use('/api/user',         usersRoute);
+app.use('/api/login', loginRoute);
+app.use('/api/buildings', buildingsRoute);
+app.use('/api/checkins', checkinsRoute);
+app.use('/api/user', usersRoute);
 
+// Catch-all for unrecognized API routes
 app.all('/api/*', (req, res) => {
   res.status(404).json({ success: false, message: 'API route not found' });
 });
 
-
-// optional test endpoint
-// Error handling middleware  
-
+// Initialize DB and start server
 (async () => {
   try {
     const database = await createDatabaseConnection(passwordConfig);
@@ -65,8 +53,6 @@ app.all('/api/*', (req, res) => {
   }
 })();
 
-
-module.exports = router;
 
 
 

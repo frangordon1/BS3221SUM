@@ -1,13 +1,13 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
 
-//Submit registration request
+// Submit registration request
 router.post('/register-request', async (req, res) => {
   const db = req.app.locals.database;
   const { staffID, firstName, lastName, email, password } = req.body;
   console.log("Extracted password:", password);
   try {
-    const request = db.poolconnection.request(); 
+    const request = db.poolconnection.request();
 
     // Input parameters
     await request
@@ -28,12 +28,12 @@ router.post('/register-request', async (req, res) => {
   }
 });
 
-//Get the pending wardens
+// Get the pending wardens
 router.get('/pending-wardens', async (req, res) => {
   const db = req.app.locals.database;
 
   try {
-    const request = db.poolconnection.request(); 
+    const request = db.poolconnection.request();
     const result = await request.query('SELECT * FROM PendingWardens');
     res.json(result.recordset);
   } catch (err) {
@@ -92,8 +92,6 @@ router.post('/approve-warden/:staffID', async (req, res) => {
   }
 });
 
-
-
-export default router;
+module.exports = router;
 
   

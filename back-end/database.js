@@ -1,15 +1,13 @@
-import sql from 'mssql';
+const sql = require('mssql');
 
 let database = null;
 
-export default class Database {
-  config = {};
-  poolconnection = null;
-  sql = sql;
-  connected = false;
-
+class Database {
   constructor(config) {
     this.config = config;
+    this.poolconnection = null;
+    this.sql = sql;
+    this.connected = false;
   }
 
   async connect() {
@@ -36,7 +34,7 @@ export default class Database {
     } catch (error) {
       console.error('Error disconnecting from the database:', error);
     }
-  } 
+  }
 
   async executeQuery(query) {
     const request = this.poolconnection.request();
@@ -46,8 +44,14 @@ export default class Database {
   }
 }
 
-export const createDatabaseConnection = async (passwordConfig) => {
+const createDatabaseConnection = async (passwordConfig) => {
   database = new Database(passwordConfig);
   await database.connect();
   return database;
 };
+
+module.exports = {
+  Database,
+  createDatabaseConnection,
+};
+

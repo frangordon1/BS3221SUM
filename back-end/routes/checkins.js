@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 
 const router = express.Router();
 
@@ -11,7 +11,6 @@ function parseTimeToToday(timeStr) {
   return now;
 }
 
-  
 router.post('/', async (req, res) => {
   const db = req.app.locals.database;
   const { staffID, buildingName, checkInTime, checkOutTime } = req.body;
@@ -30,7 +29,6 @@ router.post('/', async (req, res) => {
 
     const checkInID = Math.floor(100000 + Math.random() * 900000);
 
-    // Insert check-in record
     await db.poolconnection
       .request()
       .input('staffID', db.sql.NVarChar, staffID)
@@ -42,19 +40,16 @@ router.post('/', async (req, res) => {
         VALUES (@staffID, @buildingID, @checkInTime, @checkOutTime)
       `);
 
-    // Get current time and parse check-in/check-out time
     const now = new Date();
     const checkInDate = parseTimeToToday(checkInTime);
     const checkOutDate = parseTimeToToday(checkOutTime);
 
-    // Update the wardenAssigned status only for the specific building
     const updateWardenAssigned = (value) => db.poolconnection
       .request()
       .input('buildingID', db.sql.NVarChar, String(buildingID))
       .input('value', db.sql.Bit, value)
       .query('UPDATE Buildings SET wardenAssigned = @value WHERE buildingID = @buildingID');
 
-    // Check if there's at least one active shift for this building now
     const activeShifts = await db.poolconnection
       .request()
       .input('buildingID', db.sql.NVarChar, buildingID)
@@ -77,7 +72,6 @@ router.post('/', async (req, res) => {
 
     await updateWardenAssigned(isActive ? 1 : 0);
 
-
     res.status(200).json({ success: true, checkInID });
   } catch (err) {
     console.error('Error inserting check-in:', err);
@@ -85,16 +79,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-  
 router.get('/', async (req, res) => {
   const db = req.app.locals.database;
-  const { staffID } = req.query; // Assuming staffID is sent as a query parameter
+  const { staffID } = req.query;
 
   try {
-    // Modify the SQL query to filter by staffID
     const result = await db.poolconnection
       .request()
-      .input('staffID', db.sql.NVarChar, staffID) // Ensure that the staffID is passed correctly
+      .input('staffID', db.sql.NVarChar, staffID)
       .query(`
         SELECT 
           c.checkInID,
@@ -109,7 +101,7 @@ router.get('/', async (req, res) => {
         JOIN Wardens s ON c.staffID = s.staffID
         WHERE c.staffID = s.staffID
       `);
-      
+
     const now = new Date();
     const shiftsWithStatus = result.recordset.map(shift => {
       const parsedCheckInTime = parseTimeToToday(shift.checkInTime);
@@ -129,14 +121,13 @@ router.get('/', async (req, res) => {
       };
     });
 
-    console.log(result.recordset); 
+    console.log(result.recordset);
     res.status(200).json(shiftsWithStatus);
   } catch (err) {
     console.error('Error fetching check-ins:', err);
     res.status(500).json({ success: false, message: 'Failed to fetch check-ins' });
   }
 });
-
 
 router.put('/:id', async (req, res) => {
   const db = req.app.locals.database;
@@ -182,7 +173,6 @@ router.put('/:id', async (req, res) => {
         `);
     };
 
-    // Check if there's at least one active shift for this building now
     const activeShifts = await db.poolconnection
       .request()
       .input('buildingID', db.sql.NVarChar, buildingID)
@@ -211,8 +201,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-
-
 router.delete('/:id', async (req, res) => {
   const db = req.app.locals.database;
   const { id } = req.params;
@@ -230,6 +218,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+module.exports = router;
 
-export default router;
 

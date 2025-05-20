@@ -31,7 +31,13 @@ const Home = () => {
         const shiftsData = await shiftsRes.json();
   
         // Filter shifts by the logged-in user's staffID
-        const filteredShifts = shiftsData.filter(shift => shift.staffID === staffID);
+        const today = new Date().toISOString().split('T')[0];
+
+        const filteredShifts = shiftsData.filter(shift => {
+          const shiftDate = shift.timestamp?.split('T')[0]; // assumes ISO 8601 timestamp
+          return shift.staffID === staffID && shiftDate === today;
+        });
+
         setAllShifts(filteredShifts);
   
         const updatedStatuses = statusesData.map((status) => {

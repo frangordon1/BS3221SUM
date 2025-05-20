@@ -91,7 +91,8 @@ router.get('/', async (req, res) => {
         SELECT 
           c.checkInID,
           c.checkInTime, 
-          c.checkOutTime, 
+          c.checkOutTime,
+          c.timestamp,
           b.buildingName AS building,
           s.firstName,
           s.lastName,

@@ -13,7 +13,6 @@ import { clearCheckIns } from './schedule.js';
 const port = process.env.PORT || 5000;
 const app = express();
 
-// ✅ ALLOW only your static frontend origin
 const corsOptions = {
   origin: 'https://thankful-smoke-05a308503.6.azurestaticapps.net',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -21,9 +20,11 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 };
-
-app.use(cors(corsOptions));
+ 
 app.use(express.json());
+
+// Explicitly handle OPTIONS requests to ensure CORS headers are sent
+app.options('*', cors(corsOptions));
 
 // API Routes
 app.use('/api/wardenregister', wardenRegistrationRoutes);

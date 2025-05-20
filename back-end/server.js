@@ -27,6 +27,11 @@ app.use('/api/user', usersRoute);
     const database = await createDatabaseConnection(passwordConfig);
     app.locals.database = database; 
 
+    app.get('/api/test', (req, res) => {
+      res.send('API is working');
+    });
+    
+
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });

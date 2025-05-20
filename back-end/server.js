@@ -24,7 +24,16 @@ const corsOptions = {
 // no need for any CORS middleware here!
 // app.use(cors({ origin: /*…*/ }));
 
+app.use((req, res, next) => {
+  if (req.originalUrl.startsWith('/api')) {
+    console.log(`[${req.method}] ${req.originalUrl}`);
+  }
+  next();
+});
+
 app.use(express.json());
+
+
 
 // API Routes
 app.use('/api/wardenregister', wardenRegistrationRoutes);
@@ -34,12 +43,6 @@ app.use('/api/checkins',     checkinsRoute);
 app.use('/api/user',         usersRoute);
 
 // optional test endpoint
-// Catch-all for any unhandled API routes
-app.use('*', (req, res, next) => {
-  console.warn(`routes: ${req.method} ${req.originalUrl}`);
-  res.status(404).json({ error: `API route not found: ${req.originalUrl}` });
-});
-
 // Error handling middleware  
 
 (async () => {

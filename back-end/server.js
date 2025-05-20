@@ -7,10 +7,13 @@ import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
 import { clearCheckIns } from './schedule.js';
+import cors from 'cors';
 
-const port = process.env.PORT || 5000;
+
+const port = process.env.AZURE_SQL_PASSWORD || 5000;
 const app = express();
 
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // API Routes

@@ -5,12 +5,17 @@ dotenv.config({ path: './.env.development', debug: true });
 
 
 // Check if environment variables are loaded correctly
-const server = process.env.AZURE_SQL_SERVER;
-const database = process.env.AZURE_SQL_DATABASE;
-const port = +process.env.AZURE_SQL_PORT;  // Convert to a number
-const authenticationType = process.env.AZURE_SQL_AUTHENTICATIONTYPE;
-const user = process.env.AZURE_SQL_USER;
-const password = process.env.AZURE_SQL_PASSWORD;
+export const passwordConfig = {
+  user: process.env.AZURE_SQL_USER,
+  password: process.env.AZURE_SQL_PASSWORD,
+  server: process.env.AZURE_SQL_SERVER,
+  database: process.env.AZURE_SQL_DATABASE,
+  options: {
+    encrypt: true,
+    trustServerCertificate: false
+  }
+};
+
 
 // Debugging log to check values
 console.log("Loaded environment variables:");
@@ -32,14 +37,4 @@ export const noPasswordConfig = {
   }
 };
 
-export const passwordConfig = {
-  server,
-  port,
-  database,
-  user,
-  password,
-  options: {
-    encrypt: true,
-  }
-};
 

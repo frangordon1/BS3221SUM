@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const statusColors = {
   assigned: 'green',
-  pending: 'yellow'
+  pending: 'yellow',
   none: 'red',
 };
 

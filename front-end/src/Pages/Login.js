@@ -10,7 +10,7 @@ function Login() {
     const LoginSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('/api/login', {
+        const response = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ staffID: formData.staffID, password: formData.password })

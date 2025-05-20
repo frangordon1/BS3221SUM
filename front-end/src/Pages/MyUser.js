@@ -48,7 +48,7 @@ const MyUser = () => {
     }
 
     try {
-      const res = await fetch(`/api/user/${userData.staffID}`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/${userData.staffID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editedData),
@@ -79,7 +79,7 @@ const MyUser = () => {
     if (!confirmation) return;
 
     try {
-      const res = await fetch(`/api/user/delete/${userData.staffID}`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/delete/${userData.staffID}`, {
         method: 'DELETE',
       });
 

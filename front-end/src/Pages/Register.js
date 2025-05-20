@@ -19,7 +19,7 @@ function Register() {
     console.log(formData);
 
 
-    const response = await fetch('/api/wardenregister/register-request', {
+    const response = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/wardenregister/register-request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ staffID, firstName, lastName, email, password }),

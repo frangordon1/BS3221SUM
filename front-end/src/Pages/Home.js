@@ -19,14 +19,14 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const buildingsRes = await fetch('/api/buildings');
+        const buildingsRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings');
         const buildingsData = await buildingsRes.json();
         setBuildings(buildingsData);
   
-        const statusesRes = await fetch('/api/buildings/statuses');
+        const statusesRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings/statuses');
         const statusesData = await statusesRes.json();
   
-        const shiftsRes = await fetch('/api/checkins');
+        const shiftsRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/checkins');
         const shiftsData = await shiftsRes.json();
   
         // Filter shifts by the logged-in user's staffID
@@ -74,7 +74,7 @@ const Home = () => {
     const { staffID, building, checkInTime, checkOutTime } = formData;
 
     try {
-      const response = await fetch('/api/checkins', {
+      const response = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/checkins', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ staffID, buildingName: building, checkInTime, checkOutTime }),
@@ -91,7 +91,7 @@ const Home = () => {
         alert('Check-in recorded successfully!');
         setFormData({ staffID, building: '', checkInTime: '', checkOutTime: '' });
 
-        const updatedBuildingStatusesRes = await fetch('/api/buildings/statuses');
+        const updatedBuildingStatusesRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings/statuses');
         const updatedBuildingStatuses = await updatedBuildingStatusesRes.json();
         setBuildingStatuses(updatedBuildingStatuses);
         window.location.reload();
@@ -119,7 +119,7 @@ const Home = () => {
 
   const handleConfirmClick = async (shift) => {
     try {
-      const response = await fetch(`/api/checkins/${shift.checkInID}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/checkins/${shift.checkInID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -134,12 +134,12 @@ const Home = () => {
         window.location.reload();
         
         // Refetch all shifts for the staff after the update
-        const updatedShiftsRes = await fetch(`/api/shifts?staffID=${shift.staffID}`);
+        const updatedShiftsRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/shifts?staffID=${shift.staffID}`);
         const updatedShifts = await updatedShiftsRes.json();
         setAllShifts(updatedShifts); // Update the shifts data
   
         // Refetch building statuses to ensure they reflect any changes
-        const updatedBuildingStatusesRes = await fetch('/api/buildings/statuses');
+        const updatedBuildingStatusesRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings/statuses');
         const updatedBuildingStatuses = await updatedBuildingStatusesRes.json();
         setBuildingStatuses(updatedBuildingStatuses);
   
@@ -158,7 +158,7 @@ const Home = () => {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/api/checkins/${shift.checkInID}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/checkins/${shift.checkInID}`, {
         method: 'DELETE',
       });
 
@@ -166,7 +166,7 @@ const Home = () => {
         alert('Shift deleted!');
         setAllShifts(allShifts.filter((s) => s.checkInID !== shift.checkInID));
 
-        const updatedBuildingStatusesRes = await fetch('/api/buildings/statuses');
+        const updatedBuildingStatusesRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings/statuses');
         const updatedBuildingStatuses = await updatedBuildingStatusesRes.json();
         setBuildingStatuses(updatedBuildingStatuses);
       } else {

@@ -10,9 +10,9 @@ function Wardens() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const pendingRes = await fetch('/api/wardenregister/pending-wardens');
-      const buildingRes = await fetch('/api/buildings');
-      const checkInRes = await fetch('/api/checkins');
+      const pendingRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/wardenregister/pending-wardens');
+      const buildingRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings');
+      const checkInRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/checkins');
 
       const [pendingData, buildingsData, checkInsData] = await Promise.all([
         pendingRes.json(),
@@ -39,7 +39,7 @@ function Wardens() {
     const role = roles[staffID];
     const isHealthAndSafetyTeam = role === 1 ? 1 : 0;
 
-    const response = await fetch(`/api/wardenregister/approve-warden/${staffID}`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/wardenregister/approve-warden/${staffID}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password, isHealthAndSafetyTeam }),

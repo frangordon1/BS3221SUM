@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 function Login() {
     const [formData, setFormData] = useState({ staffID: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
+    const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
 
     const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -10,7 +11,8 @@ function Login() {
     const LoginSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/login', {
+
+        const response = await fetch(`${backEndURL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ staffID: formData.staffID, password: formData.password })

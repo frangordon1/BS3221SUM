@@ -1,6 +1,4 @@
 import express from 'express';
-import cors from 'cors';
-
 import { passwordConfig } from './config.js';
 import wardenRegistrationRoutes from './routes/wardenregister.js'; 
 import loginRoute from './routes/loggingin.js'; 
@@ -9,43 +7,40 @@ import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
 import { clearCheckIns } from './schedule.js';
+import cors from 'cors';
 
+const port = process.env.AZURE_SQL_PASSWORD || 5000;
 const app = express();
-const port = process.env.PORT || 5000;
 
-// ✅ Allow only your front-end domain
+// ✅ CORS configuration (replace the origin with your Static Web App URL)
 const allowedOrigin = 'https://thankful-smoke-05a308503.6.azurestaticapps.net';
 
-// ✅ CORS setup
 app.use(cors({
   origin: allowedOrigin,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  credentials: true
 }));
 
-// ✅ Handle preflight OPTIONS requests
-app.options('*', cors());
-
-// ✅ Middleware
 app.use(express.json());
 
-// ✅ Routes
+// API Routes
 app.use('/api/wardenregister', wardenRegistrationRoutes);
 app.use('/api/login', loginRoute);  
 app.use('/api/buildings', buildingsRoute); 
 app.use('/api/checkins', checkinsRoute); 
 app.use('/api/user', usersRoute); 
 
-// ✅ Start server after DB
+// Test endpoint
+app.get('/api/test', (req, res) => {
+  res.send('API is working');
+});
+
+// Start the server after connecting to the database
 (async () => {
   try {
     const database = await createDatabaseConnection(passwordConfig);
-    app.locals.database = database;
-
-    app.get('/api/test', (req, res) => {
-      res.send('API is working');
-    });
+    app.locals.database = database; 
 
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);

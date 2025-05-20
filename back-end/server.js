@@ -7,23 +7,10 @@ import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
 import { clearCheckIns } from './schedule.js';
-import cors from 'cors';
 
 const port = process.env.PORT || 5000;
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: 'https://thankful-smoke-05a308503.6.azurestaticapps.net',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true // set to false if you don’t need cookies/auth headers
-};
-
-// Enable CORS preflight response for all routes
-app.options('*', cors(corsOptions));
-
-// Enable CORS for all routes with config
-app.use(cors(corsOptions));
 
 // JSON parsing middleware
 app.use(express.json());

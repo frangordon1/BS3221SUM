@@ -11,6 +11,7 @@ const MyUser = () => {
   });
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
 
   // useEffect to load data from localStorage when the component mounts
   useEffect(() => {
@@ -48,7 +49,7 @@ const MyUser = () => {
     }
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/${userData.staffID}`, {
+      const res = await fetch(`${backEndURL}/api/user/${userData.staffID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editedData),
@@ -79,7 +80,7 @@ const MyUser = () => {
     if (!confirmation) return;
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/user/delete/${userData.staffID}`, {
+      const res = await fetch(`${backEndURL}/api/user/delete/${userData.staffID}`, {
         method: 'DELETE',
       });
 

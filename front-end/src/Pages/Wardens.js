@@ -7,12 +7,13 @@ function Wardens() {
   const [roles, setRoles] = useState({});
   const [buildings, setBuildings] = useState([]);
   const [checkIns, setCheckIns] = useState([]);
+  const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
 
   useEffect(() => {
     const fetchData = async () => {
-      const pendingRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/wardenregister/pending-wardens');
-      const buildingRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings');
-      const checkInRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/checkins');
+      const pendingRes = await fetch(`${backEndURL}/api/wardenregister/pending-wardens`);
+      const buildingRes = await fetch(`${backEndURL}/api/buildings`);
+      const checkInRes = await fetch(`${backEndURL}/api/checkinS`);
 
       const [pendingData, buildingsData, checkInsData] = await Promise.all([
         pendingRes.json(),
@@ -39,7 +40,7 @@ function Wardens() {
     const role = roles[staffID];
     const isHealthAndSafetyTeam = role === 1 ? 1 : 0;
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/wardenregister/approve-warden/${staffID}`, {
+    const response = await fetch(`${backEndURL}/api/wardenregister/approve-warden/${staffID}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password, isHealthAndSafetyTeam }),

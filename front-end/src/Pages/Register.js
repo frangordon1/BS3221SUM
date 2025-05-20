@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 function Register() {
   const [formData, setFormData] = useState({ staffID: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
+  const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,7 +20,7 @@ function Register() {
     console.log(formData);
 
 
-    const response = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/wardenregister/register-request', {
+    const response = await fetch(`${backEndURL}/api/wardenregister/register-request`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ staffID, firstName, lastName, email, password }),

@@ -2,7 +2,7 @@ const cron = require('node-cron');
 
 let db;
 
-const clearCheckIns = async () => {
+const clearCheckIns = async (db) => {
   if (!db) {
     console.error('Database connection not established yet.');
     return;
@@ -22,7 +22,7 @@ const clearCheckIns = async () => {
 };
 
 
-const updateStatuses = async () => {
+const updateStatuses = async (db) => {
   if (!db) {
     console.error('Database connection not established yet.');
     return;

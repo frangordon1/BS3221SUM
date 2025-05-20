@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const statusColors = {
   assigned: 'green',
+  pending: 'yellow'
   none: 'red',
 };
 
@@ -61,10 +62,19 @@ const Home = () => {
             return now >= checkIn && now <= checkOut;
           });
         
+          let statusLabel = 'none';
+          if (hasStartedShift) {
+            statusLabel = 'assigned';
+          } else if (futureShifts.length > 0) {
+            statusLabel = 'pending';
+          } else {
+            statusLabel = 'none';
+          }
+          
           return {
             ...status,
             nextCheckInTime,
-            status: hasStartedShift ? 'assigned' : 'none',
+            status: statusLabel,
           };
         });
         setBuildingStatuses(updatedStatuses);

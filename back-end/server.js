@@ -35,8 +35,8 @@ app.use('/api/user',         usersRoute);
 
 // optional test endpoint
 // Catch-all for any unhandled API routes
-app.use('/api', (req, res, next) => {
-  console.warn(`❌ Unmatched API route: ${req.method} ${req.originalUrl}`);
+app.use('*', (req, res, next) => {
+  console.warn(`routes: ${req.method} ${req.originalUrl}`);
   res.status(404).json({ error: `API route not found: ${req.originalUrl}` });
 });
 

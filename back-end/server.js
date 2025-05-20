@@ -7,7 +7,9 @@ import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
 import cors from 'cors';
-import express from 'express';
+
+const express = require('express');
+
 
 
 const app = express();
@@ -64,7 +66,7 @@ app.all('/api/*', (req, res) => {
 })();
 
 
-
+module.exports = router;
 
 
 

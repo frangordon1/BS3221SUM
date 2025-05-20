@@ -7,6 +7,7 @@ const usersRoute = require('./routes/user');
 const { createDatabaseConnection } = require('./database');
 const cors = require('cors');
 const express = require('express');
+const { clearCheckIns } = require('./schedule.js');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -17,11 +18,6 @@ const corsOptions = {
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
-
-app.use((req, res, next) => {
-  console.log(`[ROUTE HIT] ${req.method} ${req.originalUrl}`);
-  next();
-});
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -43,6 +39,8 @@ app.all('/api/*', (req, res) => {
   try {
     const database = await createDatabaseConnection(passwordConfig);
     app.locals.database = database;
+
+    await clearCheckIns();
 
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);

@@ -9,18 +9,23 @@ import { createDatabaseConnection } from './database.js';
 import { clearCheckIns } from './schedule.js';
 import cors from 'cors';
 
-const port = process.env.PORT || 5000; // fixed: used wrong env variable before
+const port = process.env.PORT || 5000;
 const app = express();
 
-// CORS configuration: allow frontend origin
+// CORS configuration
 const corsOptions = {
-  origin: 'https://thankful-smoke-05a308503.6.azurestaticapps.net', // replace with your Static Web App domain
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  origin: 'https://thankful-smoke-05a308503.6.azurestaticapps.net',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true // set to false if you don’t need cookies/auth headers
 };
 
-app.use(cors(corsOptions));
+// Enable CORS preflight response for all routes
 app.options('*', cors(corsOptions));
+
+// Enable CORS for all routes with config
+app.use(cors(corsOptions));
+
+// JSON parsing middleware
 app.use(express.json());
 
 // API Routes
@@ -35,7 +40,7 @@ app.get('/api/test', (req, res) => {
   res.send('API is working');
 });
 
-// Start the server after connecting to the database
+// Start server after DB connection
 (async () => {
   try {
     const database = await createDatabaseConnection(passwordConfig);
@@ -49,6 +54,7 @@ app.get('/api/test', (req, res) => {
     process.exit(1);
   }
 })();
+
 
 
 

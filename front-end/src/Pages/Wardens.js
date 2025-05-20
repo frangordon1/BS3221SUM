@@ -130,9 +130,16 @@ function Wardens() {
           <div key={index} className="schedule-row">
             <div className="building-name">{building.buildingName}</div>
             <div className="shift-cells">
-              {checkIns
-                .filter(ci => ci.building === building.buildingName)
-                .map((ci, i) => {
+            {checkIns
+              .filter(ci => {
+                const isSameBuilding = ci.building === building.buildingName;
+                const today = new Date();
+                const timestampDate = new Date(ci.timestamp);
+                const isToday = timestampDate.toDateString() === today.toDateString();
+            
+                return isSameBuilding && isToday;
+              })
+              .map((ci, i) => {
                   const left = timeToHour(ci.checkInTime) * 60;
                   const width = (timeToHour(ci.checkOutTime) - timeToHour(ci.checkInTime)) * 60;
                   return (

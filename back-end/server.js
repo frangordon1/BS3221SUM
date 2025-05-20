@@ -25,9 +25,7 @@ const corsOptions = {
 // app.use(cors({ origin: /*…*/ }));
 
 app.use((req, res, next) => {
-  if (req.originalUrl.startsWith('/api')) {
-    console.log(`[${req.method}] ${req.originalUrl}`);
-  }
+  console.log(`[ROUTE HIT] ${req.method} ${req.originalUrl}`);
   next();
 });
 
@@ -42,6 +40,11 @@ app.use('/api/login',        loginRoute);
 app.use('/api/buildings',    buildingsRoute);
 app.use('/api/checkins',     checkinsRoute);
 app.use('/api/user',         usersRoute);
+
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ success: false, message: 'API route not found' });
+});
+
 
 // optional test endpoint
 // Error handling middleware  

@@ -7,7 +7,7 @@ const usersRoute = require('./routes/user');
 const { createDatabaseConnection } = require('./database');
 const cors = require('cors');
 const express = require('express');
-const { clearCheckIns } = require('./schedule.js');
+const { scheduleTasks, clearCheckIns } = require('./schedule.js');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -40,7 +40,8 @@ app.all('/api/*', (req, res) => {
     const database = await createDatabaseConnection(passwordConfig);
     app.locals.database = database;
 
-    await clearCheckIns();
+    await clearCheckIns(database);
+    scheduleTasks(database);
 
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);

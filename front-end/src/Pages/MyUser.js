@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MyUser = () => {
   const [userData, setUserData] = useState({});
@@ -12,6 +13,7 @@ const MyUser = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
+  const navigate = useNavigate();
 
   // useEffect to load data from localStorage when the component mounts
   useEffect(() => {
@@ -86,7 +88,7 @@ const MyUser = () => {
 
       if (res.ok) {
         localStorage.removeItem('userData'); 
-        window.location.href = '/'; 
+        navigate('/'); 
         alert('Your account has been deleted.');
       } else {
         alert('Failed to delete account.');

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const statusColors = {
   assigned: 'green',
@@ -16,6 +17,7 @@ const Home = () => {
   const [editingRow, setEditingRow] = useState(null);
   const [editedTimes, setEditedTimes] = useState({});
   const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {

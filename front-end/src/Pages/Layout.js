@@ -1,12 +1,14 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import "./Layout.css";
 
 const handleLogout = () => {
+  const navigate = useNavigate();
   // Clear the user data from localStorage
   localStorage.removeItem('userData');
   // Redirect to the Login page
-  window.location.href = '/';
+  navigate('/');
 };
 
 const Layout = () => {

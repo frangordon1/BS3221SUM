@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [formData, setFormData] = useState({ staffID: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
   const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +30,7 @@ function Register() {
 
     if (response.ok) {
       alert('Your request has been sent to the Health and Safety Team');
-      window.location.href = '/';
+      navigate('/');
     } else {
       alert('Something went wrong!');
     }
@@ -58,7 +60,7 @@ function Register() {
             <input type="password" id="confirmPassword" name="confirmPassword" required  value={formData.confirmPassword} onChange={handleChange}/><br/>
 
             <button className="standard-button" type="submit">Register</button>
-            <button className="standard-button" type="button" padding="10" onClick={() => window.location.href = '/'}>Cancel</button>
+            <button className="standard-button" type="button" padding="10" onClick={() => navigate('/')}>Cancel</button>
         </form>
 
         <footer className="footer">

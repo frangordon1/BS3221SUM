@@ -48,7 +48,7 @@ function Login() {
                 <input type="password" id="password" name="password" required value={formData.password} onChange={handleChange}/><br/>
 
                 <button className="standard-button" type="submit" padding="10">Login</button>
-                <button className="standard-button" type="button" padding="10" onClick={() => window.location.href = '/register'}>Register</button>
+                <button className="standard-button" type="button" padding="10" onClick={() => navigate('/register')}>Register</button>
             </form>
 
             <footer className="footer">

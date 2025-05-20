@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import './WardenSchedule.css'; // Add this line to import the CSS
+import './WardenSchedule.css';
+import { useNavigate } from 'react-router-dom';
 
 function Wardens() {
   const [pendingWardens, setPendingWardens] = useState([]);
@@ -8,6 +9,7 @@ function Wardens() {
   const [buildings, setBuildings] = useState([]);
   const [checkIns, setCheckIns] = useState([]);
   const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {

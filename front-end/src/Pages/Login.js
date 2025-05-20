@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [formData, setFormData] = useState({ staffID: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
     const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,7 +27,7 @@ function Login() {
             if (userData.success) {
                 console.log("User found, details received");
                 localStorage.setItem('userData', JSON.stringify(userData.user)); 
-                window.location.href = '/home';
+                navigate('/home');
             } else {
                 alert('Invalid credentials');
             }

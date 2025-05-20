@@ -7,11 +7,19 @@ import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
 import { clearCheckIns } from './schedule.js';
+import cors from 'cors';
 
-
-const port = process.env.AZURE_SQL_PASSWORD || 5000;
+const port = process.env.PORT || 5000; // fixed: used wrong env variable before
 const app = express();
 
+// CORS configuration: allow frontend origin
+const corsOptions = {
+  origin: 'https://thankful-smoke-05a308503.6.azurestaticapps.net', // replace with your Static Web App domain
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // API Routes
@@ -21,17 +29,16 @@ app.use('/api/buildings', buildingsRoute);
 app.use('/api/checkins', checkinsRoute); 
 app.use('/api/user', usersRoute); 
 
+// Test endpoint
+app.get('/api/test', (req, res) => {
+  res.send('API is working');
+});
 
 // Start the server after connecting to the database
 (async () => {
   try {
     const database = await createDatabaseConnection(passwordConfig);
     app.locals.database = database; 
-
-    app.get('/api/test', (req, res) => {
-      res.send('API is working');
-    });
-    
 
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
@@ -41,5 +48,6 @@ app.use('/api/user', usersRoute);
     process.exit(1);
   }
 })();
+
 
 

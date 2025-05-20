@@ -1,17 +1,17 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "./Layout.css";
 
-const handleLogout = () => {
-  const navigate = useNavigate();
-  // Clear the user data from localStorage
-  localStorage.removeItem('userData');
-  // Redirect to the Login page
-  navigate('/');
-};
-
 const Layout = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear the user data from localStorage
+    localStorage.removeItem('userData');
+    // Redirect to the Login page
+    navigate('/');
+  };
+
   return (
     <div className="layout-container">
       <aside className="sidebar">

@@ -36,8 +36,8 @@ router.post('/', async (req, res) => {
       .input('checkInTime', db.sql.NVarChar, checkInTime)
       .input('checkOutTime', db.sql.NVarChar, checkOutTime)
       .query(`
-        INSERT INTO CheckIns (staffID, buildingID, checkInTime, checkOutTime)
-        VALUES (@staffID, @buildingID, @checkInTime, @checkOutTime)
+        INSERT INTO CheckIns (staffID, buildingID, checkInTime, checkOutTime, timestamp)
+        VALUES (@staffID, @buildingID, @checkInTime, @checkOutTime, GETDATE())
       `);
 
     const now = new Date();

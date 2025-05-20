@@ -159,7 +159,7 @@ const Home = () => {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/checkins/${shift.checkInID}`, {
+      const response = await fetch(`${backEndURL}/api/checkins/${shift.checkInID}`, {
         method: 'DELETE',
       });
 
@@ -167,7 +167,7 @@ const Home = () => {
         alert('Shift deleted!');
         setAllShifts(allShifts.filter((s) => s.checkInID !== shift.checkInID));
 
-        const updatedBuildingStatusesRes = await fetch('${process.env.REACT_APP_BACKEND_URL}/api/buildings/statuses');
+        const updatedBuildingStatusesRes = await fetch(`${backEndURL}/api/buildings/statuses`);
         const updatedBuildingStatuses = await updatedBuildingStatusesRes.json();
         setBuildingStatuses(updatedBuildingStatuses);
       } else {

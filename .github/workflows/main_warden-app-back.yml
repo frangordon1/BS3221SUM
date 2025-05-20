@@ -60,6 +60,6 @@ jobs:
         with:
           app-name: 'warden-app-back'
           slot-name: 'Production'
-          package: ./back-end 
+          package: "back-end"
 
           

@@ -1,19 +1,19 @@
 {
-  "auth": {
-    "identityProviders": {
-      "azureActiveDirectory": {
-        "registration": {
-          "clientId": "f057f0f8-02d0-456e-8fc8-f7131b9e588d",
-          "openIdIssuer": "https://login.microsoftonline.com/a19f121d-81e1-4858-a9d8-736e267fd4c7/v2.0"
-        }
-      }
-    }
-  },
   "routes": [
     {
       "route": "/*",
       "serve": "/index.html",
       "statusCode": 200
     }
-  ]
+  ],
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "clientId": "your-client-id",
+          "openIdIssuer": "your-issuer-url"
+        }
+      }
+    }
+  }
 }

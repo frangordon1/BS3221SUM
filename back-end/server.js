@@ -1,4 +1,4 @@
-import express from 'express';
+
 import { passwordConfig } from './config.js';
 import wardenRegistrationRoutes from './routes/wardenregister.js';
 import loginRoute from './routes/loggingin.js';
@@ -7,8 +7,8 @@ import checkinsRoute from './routes/checkins.js';
 import usersRoute from './routes/user.js';
 import { createDatabaseConnection } from './database.js';
 import cors from 'cors';
-// remove your `cors` import entirely, since Azure is handling it
-// import cors from 'cors';
+import express from 'express';
+
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -31,6 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cors(corsOptions))
 app.use(express.json());
 
 

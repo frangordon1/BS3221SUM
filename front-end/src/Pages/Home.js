@@ -42,20 +42,31 @@ const Home = () => {
   
         const updatedStatuses = statusesData.map((status) => {
           const buildingShifts = filteredShifts.filter((shift) => shift.building === status.buildingName);
+          
           const futureShifts = buildingShifts.filter((shift) => {
-            const checkInDateStr = `${new Date().toISOString().split('T')[0]}T${shift.checkInTime}:00`;
+            const checkInDateStr = `${today}T${shift.checkInTime}:00`;
             const checkInDate = new Date(checkInDateStr);
             return checkInDate > new Date();
           });
-  
+        
           const nextShift = futureShifts.sort((a, b) =>
-            new Date(`${new Date().toISOString().split('T')[0]}T${a.checkInTime}:00`) - new Date(`${new Date().toISOString().split('T')[0]}T${b.checkInTime}:00`)
+            new Date(`${today}T${a.checkInTime}:00`) - new Date(`${today}T${b.checkInTime}:00`)
           )[0];
           const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
-  
-          return { ...status, nextCheckInTime };
+        
+          const hasStartedShift = buildingShifts.some((shift) => {
+            const now = new Date();
+            const checkIn = new Date(`${today}T${shift.checkInTime}:00`);
+            const checkOut = new Date(`${today}T${shift.checkOutTime}:00`);
+            return now >= checkIn && now <= checkOut;
+          });
+        
+          return {
+            ...status,
+            nextCheckInTime,
+            status: hasStartedShift ? 'assigned' : 'none',
+          };
         });
-  
         setBuildingStatuses(updatedStatuses);
       } catch (err) {
         console.error('Error fetching data:', err);

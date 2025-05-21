@@ -7,7 +7,6 @@ router.put('/:staffID', async (req, res) => {
     const staffID = req.params.staffID;
 
     try {
-        // Check if the user exists
         const userQuery = 'SELECT * FROM Wardens WHERE staffID = @staffID';
         const result = await db.poolconnection.request()
             .input('staffID', db.sql.NVarChar(255), staffID)
@@ -17,7 +16,6 @@ router.put('/:staffID', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Update firstName, lastName, and email
         const updateQuery = `
             UPDATE Wardens
             SET firstName = @firstName, lastName = @lastName, email = @email
@@ -52,7 +50,6 @@ router.delete('/delete/:staffID', async (req, res) => {
   const db = req.app.locals.database;
 
   try {
-    // Start by checking if the user exists
     const userQuery = 'SELECT * FROM Wardens WHERE staffID = @staffID';
     const result = await db.poolconnection.request()
       .input('staffID', db.sql.NVarChar(255), req.params.staffID)
@@ -62,22 +59,18 @@ router.delete('/delete/:staffID', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Delete the user's check-ins first (to remove the foreign key conflict)
     await db.poolconnection.request()
       .input('staffID', db.sql.NVarChar(255), req.params.staffID)
       .query('DELETE FROM CheckIns WHERE staffID = @staffID');
 
-    // Delete the user's credentials
     await db.poolconnection.request()
       .input('staffID', db.sql.NVarChar(255), req.params.staffID)
       .query('DELETE FROM WardenCredentials WHERE staffID = @staffID');
 
-    // Finally, delete the user's details from the Wardens table
     await db.poolconnection.request()
       .input('staffID', db.sql.NVarChar(255), req.params.staffID)
       .query('DELETE FROM Wardens WHERE staffID = @staffID');
 
-    // Successfully deleted
     res.status(200).json({ message: 'Account deleted successfully' });
   } catch (err) {
     console.error('Error deleting account:', err);

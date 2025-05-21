@@ -18,95 +18,51 @@ const Home = () => {
   const [editedTimes, setEditedTimes] = useState({});
   const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const buildingsRes = await fetch(`${backEndURL}/api/buildings`);
-        const buildingsData = await buildingsRes.json();
-        setBuildings(buildingsData);
-  
-        const statusesRes = await fetch(`${backEndURL}/api/buildings/statuses`);
-        const statusesData = await statusesRes.json();
-  
-        const shiftsRes = await fetch(`${backEndURL}/api/checkins`);
-        const shiftsData = await shiftsRes.json();
-  
-        // Filter shifts by the logged-in user's staffID
-        const today = new Date().toISOString().split('T')[0];
-
-        const filteredShifts = shiftsData.filter(shift => {
-          const shiftDate = shift.timestamp?.split('T')[0]; // assumes ISO 8601 timestamp
-          return shift.staffID === staffID && shiftDate === today;
-        });
-
-        setAllShifts(filteredShifts);
-  
-        const updatedStatuses = statusesData.map((status) => {
-          const buildingShifts = filteredShifts.filter((shift) => shift.building === status.buildingName);
-          
-          const futureShifts = buildingShifts.filter((shift) => {
-            const checkInDateStr = `${today}T${shift.checkInTime}:00`;
-            const checkInDate = new Date(checkInDateStr);
-            return checkInDate > new Date();
-          });
-        
-          const nextShift = futureShifts.sort((a, b) =>
-            new Date(`${today}T${a.checkInTime}:00`) - new Date(`${today}T${b.checkInTime}:00`)
-          )[0];
-          const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
-        
-          const hasStartedShift = buildingShifts.some((shift) => {
-            const now = new Date();
-            const checkIn = new Date(`${today}T${shift.checkInTime}:00`);
-            const checkOut = new Date(`${today}T${shift.checkOutTime}:00`);
-            return now >= checkIn && now <= checkOut;
-          });
-        
-          let statusLabel = 'none';
-          if (hasStartedShift) {
-            statusLabel = 'assigned';
-          } else if (futureShifts.length > 0) {
-            statusLabel = 'pending';
-          } else {
-            statusLabel = 'none';
-          }
-          
-          return {
-            ...status,
-            nextCheckInTime,
-            status: statusLabel,
-          };
-        });
-        setBuildingStatuses(updatedStatuses);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-      }
-    };
-  
-    fetchData();
-  }, [staffID]);
-
-  //second useEffect to update building statuses for all users
-  useEffect(() => {
-  const fetchStatuses = async () => {
+useEffect(() => {
+  const fetchData = async () => {
     try {
+      const buildingsRes = await fetch(`${backEndURL}/api/buildings`);
+      const buildingsData = await buildingsRes.json();
+      setBuildings(buildingsData);
+
       const statusesRes = await fetch(`${backEndURL}/api/buildings/statuses`);
       const statusesData = await statusesRes.json();
 
+      const shiftsRes = await fetch(`${backEndURL}/api/checkins`);
+      const shiftsData = await shiftsRes.json();
+
       const today = new Date().toISOString().split('T')[0];
 
+      // Filter for current user's shifts
+      const filteredShifts = shiftsData.filter((shift) => {
+        const shiftDate = shift.timestamp?.split('T')[0];
+        return shift.staffID === staffID && shiftDate === today;
+      });
+      setAllShifts(filteredShifts);
+
+      // Use all shifts for building list
+      const todayAllShifts = shiftsData.filter((shift) => {
+        const shiftDate = shift.timestamp?.split('T')[0];
+        return shiftDate === today;
+      });
+
       const updatedStatuses = statusesData.map((status) => {
-        const buildingShifts = allShifts.filter((shift) => shift.building === status.buildingName);
-        
+        const buildingShifts = todayAllShifts.filter(
+          (shift) => shift.building === status.buildingName
+        );
+
         const futureShifts = buildingShifts.filter((shift) => {
           const checkInDateStr = `${today}T${shift.checkInTime}:00`;
           const checkInDate = new Date(checkInDateStr);
           return checkInDate > new Date();
         });
 
-        const nextShift = futureShifts.sort((a, b) =>
-          new Date(`${today}T${a.checkInTime}:00`) - new Date(`${today}T${b.checkInTime}:00`)
-        )[0];
+        const nextShift = futureShifts
+          .sort(
+            (a, b) =>
+              new Date(`${today}T${a.checkInTime}:00`) -
+              new Date(`${today}T${b.checkInTime}:00`)
+          )[0];
         const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
 
         const hasStartedShift = buildingShifts.some((shift) => {
@@ -132,9 +88,12 @@ const Home = () => {
 
       setBuildingStatuses(updatedStatuses);
     } catch (err) {
-      console.error('Polling error:', err);
+      console.error('Error fetching data:', err);
     }
   };
+
+  fetchData();
+}, [staffID]);
 
   const interval = setInterval(fetchStatuses, 10000); 
   return () => clearInterval(interval); 

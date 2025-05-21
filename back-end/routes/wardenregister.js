@@ -9,7 +9,6 @@ router.post('/register-request', async (req, res) => {
   try {
     const request = db.poolconnection.request();
 
-    // Input parameters
     await request
       .input('staffID', db.sql.NVarChar(255), staffID)
       .input('firstName', db.sql.NVarChar(255), firstName)
@@ -28,7 +27,6 @@ router.post('/register-request', async (req, res) => {
   }
 });
 
-// Get the pending wardens
 router.get('/pending-wardens', async (req, res) => {
   const db = req.app.locals.database;
 
@@ -50,7 +48,6 @@ router.post('/approve-warden/:staffID', async (req, res) => {
   try {
     const request = db.poolconnection.request();
 
-    // Fetch the specific pending warden
     const result = await request
       .input('staffID', db.sql.NVarChar(255), staffID)
       .query('SELECT * FROM PendingWardens WHERE staffID = @staffID');
@@ -63,7 +60,6 @@ router.post('/approve-warden/:staffID', async (req, res) => {
 
     const password = warden.password;
 
-    // Insert into Wardens table
     await request
       .input('firstName', db.sql.NVarChar(255), warden.firstName)
       .input('lastName', db.sql.NVarChar(255), warden.lastName)
@@ -74,7 +70,6 @@ router.post('/approve-warden/:staffID', async (req, res) => {
         VALUES (@staffID, @firstName, @lastName, @healthAndSafetyTeam, @email)
       `);
 
-    // Insert into WardenCredentials table
     await request
       .input('password', db.sql.NVarChar(255), password)
       .query(`
@@ -82,7 +77,6 @@ router.post('/approve-warden/:staffID', async (req, res) => {
         VALUES (@staffID, @password)
       `);
 
-    // Delete from PendingWardens
     await request.query('DELETE FROM PendingWardens WHERE staffID = @staffID');
 
     res.send('Request approved');

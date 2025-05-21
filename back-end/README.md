@@ -21,4 +21,4 @@ Admin Account:
 The core admin account is 
 Staff ID: 001
 Password: admin
-This cannot be deleted.
+This cannot be deleted through the public web application.

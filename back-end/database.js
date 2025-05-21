@@ -11,7 +11,6 @@ class Database {
   }
 
   async connect() {
-    // connecting to the database
     try {
       this.poolconnection = await sql.connect(this.config);
       this.connected = true;
@@ -24,7 +23,6 @@ class Database {
   }
 
   async disconnect() {
-    // disconnecting from the database
     try {
       if (this.connected) {
         await this.poolconnection.close();

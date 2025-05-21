@@ -95,11 +95,6 @@ useEffect(() => {
   fetchData();
 }, [staffID]);
 
-  const interval = setInterval(fetchStatuses, 10000); 
-  return () => clearInterval(interval); 
-}, [allShifts]); 
-
-
   const parseTime = (timeStr) => {
     const [hour, minute] = timeStr.split(':').map(Number);
     const time = new Date();

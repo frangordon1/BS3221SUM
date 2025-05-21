@@ -102,7 +102,7 @@
   }
   
   .logoutButton:hover {
-    background-color: darkred; /* Darker red color when hovered */
+    background-color: darkred;
   }
   
   .main-content {

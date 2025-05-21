@@ -86,6 +86,61 @@ const Home = () => {
     fetchData();
   }, [staffID]);
 
+  //second useEffect to update building statuses for all users
+  useEffect(() => {
+  const fetchStatuses = async () => {
+    try {
+      const statusesRes = await fetch(`${backEndURL}/api/buildings/statuses`);
+      const statusesData = await statusesRes.json();
+
+      const today = new Date().toISOString().split('T')[0];
+
+      const updatedStatuses = statusesData.map((status) => {
+        const buildingShifts = allShifts.filter((shift) => shift.building === status.buildingName);
+        
+        const futureShifts = buildingShifts.filter((shift) => {
+          const checkInDateStr = `${today}T${shift.checkInTime}:00`;
+          const checkInDate = new Date(checkInDateStr);
+          return checkInDate > new Date();
+        });
+
+        const nextShift = futureShifts.sort((a, b) =>
+          new Date(`${today}T${a.checkInTime}:00`) - new Date(`${today}T${b.checkInTime}:00`)
+        )[0];
+        const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
+
+        const hasStartedShift = buildingShifts.some((shift) => {
+          const now = new Date();
+          const checkIn = new Date(`${today}T${shift.checkInTime}:00`);
+          const checkOut = new Date(`${today}T${shift.checkOutTime}:00`);
+          return now >= checkIn && now <= checkOut;
+        });
+
+        let statusLabel = 'none';
+        if (hasStartedShift) {
+          statusLabel = 'assigned';
+        } else if (futureShifts.length > 0) {
+          statusLabel = 'pending';
+        }
+
+        return {
+          ...status,
+          nextCheckInTime,
+          status: statusLabel,
+        };
+      });
+
+      setBuildingStatuses(updatedStatuses);
+    } catch (err) {
+      console.error('Polling error:', err);
+    }
+  };
+
+  const interval = setInterval(fetchStatuses, 10000); 
+  return () => clearInterval(interval); 
+}, [allShifts]); 
+
+
   const parseTime = (timeStr) => {
     const [hour, minute] = timeStr.split(':').map(Number);
     const time = new Date();

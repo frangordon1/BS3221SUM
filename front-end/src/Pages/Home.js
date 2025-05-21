@@ -170,7 +170,6 @@ useEffect(() => {
         handleCancelClick();
         window.location.reload();
         
-        // Refetch all shifts for the staff after the update
         const updatedShiftsRes = await fetch(`${backEndURL}/api/shifts?staffID=${shift.staffID}`);
         const updatedShifts = await updatedShiftsRes.json();
         setAllShifts(updatedShifts); // Update the shifts data

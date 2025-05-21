@@ -33,7 +33,6 @@ app.all('/api/*', (req, res) => {
   res.status(404).json({ success: false, message: 'API route not found' });
 });
 
-// Initialize DB and start server
 (async () => {
   try {
     const database = await createDatabaseConnection(passwordConfig);

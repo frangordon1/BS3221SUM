@@ -15,11 +15,10 @@ const MyUser = () => {
   const backEndURL = "https://warden-app-back-c2cfdhg8bnhwc4bj.uksouth-01.azurewebsites.net";
   const navigate = useNavigate();
 
-  // useEffect to load data from localStorage when the component mounts
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem('userData')) || {};
     setUserData(storedUserData);
-  }, []);  // Empty dependency array means this runs once when the component mounts
+  }, []); 
 
   const handleEditClick = () => {
     setEditedData({

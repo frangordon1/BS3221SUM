@@ -64,12 +64,6 @@ useEffect(() => {
               new Date(`${today}T${b.checkInTime}:00`)
           )[0];
         const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
-        const nextCheckOutTime = currentShift
-          ? currentShift.checkOutTime
-          : nextShift
-          ? nextShift.checkOutTime
-          : null;
-
 
         const currentShift = buildingShifts.find((shift) => {
           const now = new Date();
@@ -77,6 +71,12 @@ useEffect(() => {
           const checkOut = new Date(`${today}T${shift.checkOutTime}:00`);
           return now >= checkIn && now <= checkOut;
         });
+        
+        const nextCheckOutTime = currentShift
+          ? currentShift.checkOutTime
+          : nextShift
+          ? nextShift.checkOutTime
+          : null;
 
         const hasStartedShift = Boolean(currentShift);
 

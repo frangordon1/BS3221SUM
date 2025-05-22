@@ -83,6 +83,7 @@ useEffect(() => {
         return {
           ...status,
           nextCheckInTime,
+          nextCheckOutTime,
           status: statusLabel,
         };
       });

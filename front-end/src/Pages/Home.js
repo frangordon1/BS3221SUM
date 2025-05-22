@@ -64,14 +64,21 @@ useEffect(() => {
               new Date(`${today}T${b.checkInTime}:00`)
           )[0];
         const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
-        const nextCheckOutTime = nextShift ? nextShift.checkOutTime : null;
+        const nextCheckOutTime = currentShift
+          ? currentShift.checkOutTime
+          : nextShift
+          ? nextShift.checkOutTime
+          : null;
 
-        const hasStartedShift = buildingShifts.some((shift) => {
+
+        const currentShift = buildingShifts.find((shift) => {
           const now = new Date();
           const checkIn = new Date(`${today}T${shift.checkInTime}:00`);
           const checkOut = new Date(`${today}T${shift.checkOutTime}:00`);
           return now >= checkIn && now <= checkOut;
         });
+
+        const hasStartedShift = Boolean(currentShift);
 
         let statusLabel = 'none';
         if (hasStartedShift) {

@@ -64,6 +64,7 @@ useEffect(() => {
               new Date(`${today}T${b.checkInTime}:00`)
           )[0];
         const nextCheckInTime = nextShift ? nextShift.checkInTime : null;
+        const nextCheckOutTime = nextShift ? nextShift.checkOutTime : null;
 
         const hasStartedShift = buildingShifts.some((shift) => {
           const now = new Date();
@@ -195,23 +196,59 @@ useEffect(() => {
 
     try {
       const response = await fetch(`${backEndURL}/api/checkins/${shift.checkInID}`, {
-        method: 'DELETE',
+          method: 'DELETE',
       });
-
+      
       if (response.ok) {
         alert('Shift deleted!');
-        setAllShifts(allShifts.filter((s) => s.checkInID !== shift.checkInID));
-
-        const updatedBuildingStatusesRes = await fetch(`${backEndURL}/api/buildings/statuses`);
-        const updatedBuildingStatuses = await updatedBuildingStatusesRes.json();
+        const updatedShifts = allShifts.filter((s) => s.checkInID !== shift.checkInID);
+        setAllShifts(updatedShifts);
+      
+        // Recalculate status only for the affected building
+        const today = new Date().toISOString().split('T')[0];
+        const buildingName = shift.building;
+        const todayShifts = updatedShifts.filter(s => s.building === buildingName);
+      
+        const futureShifts = todayShifts.filter(s => {
+          const checkInDate = new Date(`${today}T${s.checkInTime}:00`);
+          return checkInDate > new Date();
+        });
+      
+        const nextShift = futureShifts
+          .sort(
+            (a, b) =>
+              new Date(`${today}T${a.checkInTime}:00`) - new Date(`${today}T${b.checkInTime}:00`)
+          )[0];
+      
+        const currentShift = todayShifts.find((s) => {
+          const now = new Date();
+          const checkIn = new Date(`${today}T${s.checkInTime}:00`);
+          const checkOut = new Date(`${today}T${s.checkOutTime}:00`);
+          return now >= checkIn && now <= checkOut;
+        });
+      
+        const statusLabel = currentShift
+          ? 'assigned'
+          : futureShifts.length > 0
+          ? 'pending'
+          : 'none';
+      
+        const updatedBuildingStatuses = buildingStatuses.map((b) => {
+          if (b.buildingName === buildingName) {
+            return {
+              ...b,
+              status: statusLabel,
+              nextRelevantTime: currentShift?.checkOutTime || nextShift?.checkOutTime || null,
+            };
+          }
+          return b;
+        });
+      
         setBuildingStatuses(updatedBuildingStatuses);
       } else {
         alert('Failed to delete shift');
       }
-    } catch (err) {
-      console.error('Delete failed:', err);
-    }
-  };
+
 
   return (
     <div>
@@ -277,7 +314,10 @@ useEffect(() => {
               <li
                 key={status.buildingID}
                 style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}
-                title={status.nextCheckInTime
+                title={  
+                  status.status === 'assigned'
+                  ? `Ongoing shift ends at: ${status.nextCheckOutTime}`
+                  : status.nextCheckInTime
                   ? `Next Warden Shift: ${status.nextCheckInTime}`
                   : 'No upcoming shift'
                 }

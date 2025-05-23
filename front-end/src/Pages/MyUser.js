@@ -5,7 +5,6 @@ const MyUser = () => {
   const [userData, setUserData] = useState({});
   const [editing, setEditing] = useState(false);
   const [editedData, setEditedData] = useState({
-    staffID: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -23,7 +22,6 @@ const MyUser = () => {
   
  const handleEditClick = () => {
     setEditedData({
-      staffID: userData.staffID || '',
       firstName: userData.firstName || '',
       lastName: userData.lastName || '',
       email: userData.email || '',
@@ -37,7 +35,6 @@ const MyUser = () => {
   const handleCancelClick = () => {
     setEditing(false);
     setEditedData({
-      staffID: userData.staffID || '',
       firstName: userData.firstName || '',
       lastName: userData.lastName || '',
       email: userData.email || '',
@@ -58,7 +55,6 @@ const MyUser = () => {
     }
 
     const updatePayload = {
-      newStaffID: editedData.staffID,
       firstName: editedData.firstName,
       lastName: editedData.lastName,
       email: editedData.email,
@@ -121,16 +117,7 @@ const MyUser = () => {
       <div className="space-y-4">
         <div>
           <label className="font-medium">Staff ID:</label><br />
-          {editing ? (
-            <input
-              type="text"
-              name="staffID"
-              value={editedData.staffID}
-              onChange={handleChange}
-              className="border p-1 w-full"
-            />
-          ) : (
-            <p>{userData.staffID}</p>
+          <input type="text" readOnly value:{userData.staffID} className="border p-1 w-full bg-gray-100"/>
           )}
         </div>
 

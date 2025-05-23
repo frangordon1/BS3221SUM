@@ -19,8 +19,7 @@ router.put('/:staffID', async (req, res) => {
         const updateQuery = `
             UPDATE WardenCredentials SET staffID = @newStaffID WHERE staffID = @staffID;
             UPDATE Wardens
-                SET staffID = @newStaffID,
-                    firstName = @firstName,
+                SET firstName = @firstName,
                     lastName = @lastName,
                     email = @email
                 WHERE staffID = @staffID;

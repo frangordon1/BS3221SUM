@@ -117,7 +117,7 @@ const MyUser = () => {
       <div className="space-y-4">
         <div>
           <label className="font-medium">Staff ID:</label><br />
-          <input type="text" readOnly value:{userData.staffID} className="border p-1 w-full bg-gray-100"/>
+          <input type="text" readOnly value={userData.staffID} className="border p-1 w-full bg-gray-100"/>
         </div>
 
         <div>

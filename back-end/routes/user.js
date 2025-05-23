@@ -17,6 +17,7 @@ router.put('/:staffID', async (req, res) => {
         }
 
         const updateQuery = `
+            UPDATE WardenCredentials SET staffID = @newStaffID WHERE staffID = @staffID;
             UPDATE Wardens
                 SET staffID = @newStaffID,
                     firstName = @firstName,
@@ -36,7 +37,7 @@ router.put('/:staffID', async (req, res) => {
             await db.poolconnection.request()
                 .input('staffID', db.sql.NVarChar(255), staffID)
                 .input('password', db.sql.NVarChar(255), password)
-                .query('UPDATE WardenCredentials SET staffID = @newStaffID, password = @password WHERE staffID = @staffID');
+                .query('UPDATE WardenCredentials SET password = @password WHERE staffID = @staffID');
         }
 
         const updatedUser = await db.poolconnection.request()

@@ -20,8 +20,8 @@ const MyUser = () => {
     const storedUserData = JSON.parse(localStorage.getItem('userData')) || {};
     setUserData(storedUserData);
   }, []); 
-
-  const handleEditClick = () => {
+  
+ const handleEditClick = () => {
     setEditedData({
       staffID: userData.staffID || '',
       firstName: userData.firstName || '',
@@ -36,7 +36,13 @@ const MyUser = () => {
 
   const handleCancelClick = () => {
     setEditing(false);
-    setEditedData({});
+    setEditedData({
+      staffID: userData.staffID || '',
+      firstName: userData.firstName || '',
+      lastName: userData.lastName || '',
+      email: userData.email || '',
+      password: '',
+    });
     setConfirmPassword('');
     setPasswordError('');
   };
@@ -45,23 +51,31 @@ const MyUser = () => {
     setEditedData({ ...editedData, [e.target.name]: e.target.value });
   };
 
-  const handleConfirmClick = async (e) => {
+  const handleConfirmClick = async () => {
     if (editedData.password && editedData.password !== confirmPassword) {
       setPasswordError("Passwords do not match");
       return;
     }
 
+    const updatePayload = {
+      newStaffID: editedData.staffID,
+      firstName: editedData.firstName,
+      lastName: editedData.lastName,
+      email: editedData.email,
+      password: editedData.password
+    };
+
     try {
       const res = await fetch(`${backEndURL}/api/user/${userData.staffID}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editedData),
+        body: JSON.stringify(updatePayload),
       });
 
       if (res.ok) {
         const updatedUser = await res.json();
         setUserData(updatedUser);
-        localStorage.setItem('userData', JSON.stringify(updatedUser));  // Update localStorage with the new data
+        localStorage.setItem('userData', JSON.stringify(updatedUser));
         setEditing(false);
         alert('Profile updated!');
       } else {
@@ -107,7 +121,17 @@ const MyUser = () => {
       <div className="space-y-4">
         <div>
           <label className="font-medium">Staff ID:</label><br />
-          <input type="text" value={userData.staffID} className="border p-1 w-full bg-gray-100" />
+          {editing ? (
+            <input
+              type="text"
+              name="staffID"
+              value={editedData.staffID}
+              onChange={handleChange}
+              className="border p-1 w-full"
+            />
+          ) : (
+            <p>{userData.staffID}</p>
+          )}
         </div>
 
         <div>

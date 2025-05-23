@@ -5,6 +5,7 @@ const MyUser = () => {
   const [userData, setUserData] = useState({});
   const [editing, setEditing] = useState(false);
   const [editedData, setEditedData] = useState({
+    staffID: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -22,6 +23,7 @@ const MyUser = () => {
 
   const handleEditClick = () => {
     setEditedData({
+      staffID: userData.staffID || '',
       firstName: userData.firstName || '',
       lastName: userData.lastName || '',
       email: userData.email || '',
@@ -105,7 +107,7 @@ const MyUser = () => {
       <div className="space-y-4">
         <div>
           <label className="font-medium">Staff ID:</label><br />
-          <input type="text" readOnly value={userData.staffID} className="border p-1 w-full bg-gray-100" />
+          <input type="text" value={userData.staffID} className="border p-1 w-full bg-gray-100" />
         </div>
 
         <div>
